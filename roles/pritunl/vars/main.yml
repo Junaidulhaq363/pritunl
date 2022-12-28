@@ -1,0 +1,8 @@
+---
+pritunl_main:
+  package: pritunl
+  install: true
+
+pritunl_client:
+  package: pritunl-client-electron
+  install: false

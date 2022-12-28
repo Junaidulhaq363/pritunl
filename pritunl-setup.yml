@@ -1,0 +1,7 @@
+---
+- hosts: pritunl
+  gather_facts: yes
+  roles:
+  - role: pritunl
+    become: true
+

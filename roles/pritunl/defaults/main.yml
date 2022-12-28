@@ -1,0 +1,14 @@
+openvpn_repo:
+  amazon: 
+    v2: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  
+pritunl_repo:
+  key:
+    server: hkp://keyserver.amazon.com
+    id: 7568D9BB55FF9E5287D586017AE645C0CF8E292A
+  amazon:
+    v2: https://repo.pritunl.com/stable/yum/amazonlinux/2/ 
+    gpgcheck: 1
+ 
+
+

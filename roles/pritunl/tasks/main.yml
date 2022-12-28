@@ -1,0 +1,31 @@
+- name: Install Required Packages
+  package: 
+    name: python3
+    state: present
+
+- name: Include OS specific tasks file
+  include_tasks:
+    file: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      paths:
+        - "tasks"
+      files:
+        - "{{ ansible_facts.distribution }}.yml"
+        - "{{ ansible_facts.os_family }}.yml"
+
+- name: Get Setup Key
+  command: pritunl setup-key
+  register: setup_key
+
+- name: Get Default Password
+  command: pritunl default-password
+  register: default_cred
+
+- name: Print Setup Key
+  debug:
+    var: setup_key.stdout
+
+- name: Print Setup Key
+  debug:
+    var: default_cred.stdout

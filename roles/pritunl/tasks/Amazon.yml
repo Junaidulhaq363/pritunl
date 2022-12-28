@@ -1,0 +1,51 @@
+- name: Install OpenVPN RPM
+  yum:
+    name: "{{ openvpn_repo.amazon.v2 }}"
+    state: present
+
+- name: Manage RPM Key
+  ignore_errors: false
+  block:
+  - name: Get RPM Key
+    command: "sudo gpg --keyserver {{ pritunl_repo.key.server }} --recv-keys {{ pritunl_repo.key.id }}"
+  - name: Export RPM Key
+    command: "sudo gpg --armor --export {{ pritunl_repo.key.id }} > /pritunlrepokey.tmp"
+  - name: Import RPM Key
+    command: "sudo rpm --import /pritunlrepokey.tmp"
+
+- name: Add Yum Repo for Pritunl
+  yum_repository:
+    name: pritunl
+    description: Pritunl YUM Repo
+    baseurl: "{{ pritunl_repo.amazon.v2 }}"
+    gpgcheck: "{{ pritunl_repo.amazon.gpgcheck }}"
+
+- name: Install OpenVPN
+  package:
+    name: openvpn
+    state: present
+
+- name: Install Pritunl
+  package:
+    name: "{{ pritunl_main.package }}"
+    state: present
+  when: pritunl_main.install is true
+
+- name: Install Pritunl Client
+  package:
+    name: "{{ pritunl_client.package }}"
+    state: present
+  when: pritunl_client.install is true
+
+- name: Start Pritunl VPN Service
+  service:
+    name: pritunl
+    state: started
+  when: pritunl_main.install is true
+
+- name: Start Pritunl VPN Service
+  service:
+    name: pritunl
+    state: started
+  when: pritunl_client.install is true
+
